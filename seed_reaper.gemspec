@@ -10,4 +10,11 @@ Gem::Specification.new do |s|
   s.licenses = ['MIT']
   s.files = Dir['lib/**/*']
   s.homepage = 'https://github.com/dbutts2/seed_reaper'
+
+  s.add_runtime_dependency 'activesupport', '>= 2.3.5'
+  s.add_development_dependency 'shoulda', '>= 4'
+  s.add_development_dependency 'rdoc', '~> 6.4'
+  s.add_development_dependency 'bundler', '~> 2.3'
+  s.add_development_dependency 'juwelier', '~> 2.1.0'
+  s.add_development_dependency 'simplecov', '>= 0'
 end

@@ -1,3 +1,9 @@
+PATH
+  remote: .
+  specs:
+    seed_reaper (0.0.1)
+      activesupport (>= 2.3.5)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -106,6 +112,7 @@ DEPENDENCIES
   bundler (~> 2.3)
   juwelier (~> 2.1.0)
   rdoc (~> 6.4)
+  seed_reaper!
   shoulda (>= 4)
   simplecov
 

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'active_support/inflector'
+
 class Seedifier
   def initialize(config)
     @config = config

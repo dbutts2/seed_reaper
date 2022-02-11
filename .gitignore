@@ -1,0 +1,11 @@
+# macOS
+*.DS_Store
+**/.DS_Store
+/public/system
+.pryrc
+
+# Vim
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-v][a-z]
+[._]sw[a-p]

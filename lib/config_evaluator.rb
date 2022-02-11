@@ -13,7 +13,7 @@ class ConfigEvaluator
     @config
   end
 
-  %i[count where joins].each do |meta_field|
+  %i[count joins].each do |meta_field|
     define_method meta_field do
       meta(meta_field)
     end

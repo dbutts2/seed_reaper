@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # encoding: utf-8
 
 require 'rubygems'
@@ -9,9 +10,11 @@ rescue Bundler::BundlerError => e
   $stderr.puts "Run `bundle install` to install missing gems"
   exit e.status_code
 end
+
 require 'rake'
 require 'juwelier'
 Juwelier::RubygemsDotOrgTasks.new
+
 require 'rake/testtask'
 Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'

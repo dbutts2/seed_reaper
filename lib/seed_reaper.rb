@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+include 'seedifier'
+
 class SeedReaper
   def initialize(config)
     @config = config

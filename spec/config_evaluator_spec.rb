@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'minitest/autorun'
+require 'spec_helper'
 require 'config_evaluator'
 
 describe ConfigEvaluator do
   describe '#schema' do
     describe 'when config is nil' do
       it 'is nill' do
-        assert_nil ConfigEvaluator.new(nil).schema
+        expect(ConfigEvaluator.new(nil).schema).to eq(nil)
       end
     end
 
@@ -15,7 +15,7 @@ describe ConfigEvaluator do
       it 'is just the config itself' do
         config = [:assoc, assoc2: :nested_assoc2]
 
-        assert_equal(ConfigEvaluator.new(config).schema, config)
+        expect(ConfigEvaluator.new(config).schema).to eq(config)
       end
     end
 
@@ -24,11 +24,11 @@ describe ConfigEvaluator do
         it 'is does not include meta' do
           schema = { association: :nested_association }
 
-          assert_equal(
+          expect(
             ConfigEvaluator.new(
               { **schema, meta: { count: 10 } }
-            ).schema, schema
-          )
+            ).schema
+          ).to eq(schema)
         end
       end
 
@@ -36,11 +36,11 @@ describe ConfigEvaluator do
         it 'is does not include meta' do
           schema = :association
 
-          assert_equal(
+          expect(
             ConfigEvaluator.new(
               [ schema, { meta: { count: 10 } } ]
-            ).schema, [schema]
-          )
+            ).schema
+          ).to eq([schema])
         end
       end
     end
@@ -52,7 +52,7 @@ describe ConfigEvaluator do
         expectation = 'test val'
         config = { assoc: :nested_assoc, meta: { field => expectation } }
 
-        assert_equal(ConfigEvaluator.new(config).send(field), expectation)
+        expect(ConfigEvaluator.new(config).send(field)).to eq(expectation)
       end
     end
   end

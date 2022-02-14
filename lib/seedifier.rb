@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'active_support/inflector'
+require 'config_evaluator'
 
 class Seedifier
   def initialize(config)

@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.files = Dir['lib/**/*']
   s.homepage = 'https://github.com/dbutts2/seed_reaper'
 
-  s.add_runtime_dependency 'activesupport', '~> 7.0'
+  s.add_runtime_dependency 'activesupport', '>= 6'
 
   s.add_development_dependency 'pry', '~> 0.13'
   s.add_development_dependency 'rspec', '~> 3.10'

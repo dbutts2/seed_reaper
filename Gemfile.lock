@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    seed_reaper (0.0.1)
-      activesupport (~> 7.0)
+    seed_reaper (0.0.2)
+      activesupport (>= 6)
 
 GEM
   remote: https://rubygems.org/

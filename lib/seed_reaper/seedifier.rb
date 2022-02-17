@@ -2,6 +2,7 @@
 
 require 'active_support/inflector'
 require_relative 'config_evaluator'
+require_relative 'value_serializer'
 
 module SeedReaper
   class Seedifier
@@ -88,18 +89,8 @@ module SeedReaper
 
     def serialize_attrs(instance)
       instance.attributes.to_h.reduce('') do |attr_str, (k, v)|
-        attr_str += "\s\s#{k}: #{serialize_value(v)},\n"
+        attr_str += "\s\s#{k}: #{ValueSerializer.new(v).serialized},\n"
       end[0...-2]
-    end
-
-    def serialize_value(value)
-      if value.nil?
-        "nil"
-      elsif value.is_a?(Integer)
-        value
-      else
-        "\"#{value}\""
-      end
     end
   end
 end

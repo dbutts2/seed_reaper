@@ -64,7 +64,7 @@ describe SeedReaper::Seedifier do
           expect(subject.seedify).to eq <<~SEED
             Thing.new(
               id: #{thing.id},
-              some_attribute: "#{thing.some_attribute}"
+              some_attribute: %q{#{thing.some_attribute}}
             ).save!(validate: false)
 
           SEED
@@ -81,7 +81,7 @@ describe SeedReaper::Seedifier do
           expect(subject.seedify).to eq <<~SEED
             Thing.new(
               id: #{thing.id},
-              some_attribute: "#{thing.some_attribute}"
+              some_attribute: %q{#{thing.some_attribute}}
             ).save!(validate: false)
 
             #{
@@ -90,7 +90,7 @@ describe SeedReaper::Seedifier do
                   AssociatedThing.new(
                     id: #{at.id},
                     thing_id: #{thing.id},
-                    another_attribute: "#{at.another_attribute}"
+                    another_attribute: %q{#{at.another_attribute}}
                   ).save!(validate: false)
                 ASSOC_SEED
               end.join("\n")

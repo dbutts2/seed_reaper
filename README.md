@@ -20,9 +20,9 @@ class AssociatedThing < ActiveRecord::Base
 end
 ```
 
-The following:
+This:
 
-`SeedReaper.new(thing: :associated_things).write!`
+`SeedReaper::SeedWriter.new(thing: :associated_things).write!`
 
 Will produce:
 
@@ -40,7 +40,7 @@ AssociatedThing.new(
 # ... the rest of the associated_things
 ```
 
-The configuration passed to `SeedReaper.new()` can be infilitely deep/complex and also accepts a `{ meta: { count: ... } }` hash at any level that will limit the number of seedified records, effectively subsetting a DB through the active record API.
+The configuration passed to `SeedReaper::SeedWriter.new()` can be infilitely deep/complex and also accepts a `{ meta: { count: ... } }` hash at any level that will limit the number of seedified records, effectively subsetting a DB through the active record API.
 
 ## Copyright
 

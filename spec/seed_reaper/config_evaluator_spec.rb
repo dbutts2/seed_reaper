@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'config_evaluator'
+require 'seed_reaper/config_evaluator'
 
-describe ConfigEvaluator do
+describe SeedReaper::ConfigEvaluator do
   describe '#schema' do
     describe 'when config is nil' do
       it 'is nill' do
-        expect(ConfigEvaluator.new(nil).schema).to eq(nil)
+        expect(described_class.new(nil).schema).to eq(nil)
       end
     end
 
@@ -15,7 +15,7 @@ describe ConfigEvaluator do
       it 'is just the config itself' do
         config = [:assoc, assoc2: :nested_assoc2]
 
-        expect(ConfigEvaluator.new(config).schema).to eq(config)
+        expect(described_class.new(config).schema).to eq(config)
       end
     end
 
@@ -25,7 +25,7 @@ describe ConfigEvaluator do
           schema = { association: :nested_association }
 
           expect(
-            ConfigEvaluator.new(
+            described_class.new(
               { **schema, meta: { count: 10 } }
             ).schema
           ).to eq(schema)
@@ -37,7 +37,7 @@ describe ConfigEvaluator do
           schema = :association
 
           expect(
-            ConfigEvaluator.new(
+            described_class.new(
               [ schema, { meta: { count: 10 } } ]
             ).schema
           ).to eq([schema])
@@ -52,7 +52,7 @@ describe ConfigEvaluator do
         expectation = 'test val'
         config = { assoc: :nested_assoc, meta: { field => expectation } }
 
-        expect(ConfigEvaluator.new(config).send(field)).to eq(expectation)
+        expect(described_class.new(config).send(field)).to eq(expectation)
       end
     end
   end

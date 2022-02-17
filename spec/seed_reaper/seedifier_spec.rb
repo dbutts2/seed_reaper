@@ -2,9 +2,9 @@
 
 require 'spec_helper'
 require 'active_record'
-require 'seedifier'
+require 'seed_reaper/seedifier'
 
-describe Seedifier do
+describe SeedReaper::Seedifier do
   before(:all) do
     ActiveRecord::Base.establish_connection(
       adapter: 'sqlite3',

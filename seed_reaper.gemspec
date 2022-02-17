@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = 'seed_reaper'
-  s.version = '0.0.2'
+  s.version = '0.0.3'
   s.summary = 'Subsetter and object to seed serializer.'
   s.description = 'Traverses active record relations given a config and writes seeds to a specified location.'
   s.authors = ['David Butts']

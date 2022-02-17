@@ -5,5 +5,4 @@ require 'seed_reaper/seed_writer'
 require 'seed_reaper/railtie' if defined?(Rails)
 
 module SeedReaper
-  VERSION = '0.0.1'
 end

@@ -1,4 +1,4 @@
-# seed_reaper (under development)
+# seed_reaper
 
 Subsetter and object to seed serializer.
 
@@ -73,6 +73,8 @@ SeedReaper::SeedWriter.new(
 ```
 
 Note that order is significant. The seeds are serialized using `.save!(validate: false)` but this will obviously not subvert the DB schema constraints in the case of foreign keys etc. I.e. if `industries` had a foreign key constraint to `service_provider_categories`, for instance, you would likely want to flip those arround in the list so that the dependency is seeded first (the seed files are prefixed with integers to enforce this during `db:seed`).
+
+Each root level config element passed to the `SeedWriter` initializer will get written to a separate seed file and sub configurations for each element will be written inline within the root level seed file. This is necessary in order to corectly interleave the processing of the seeds such that dependencies are not invalidated. This solution automatically handles `belongs_to` dependencies by serializing the dependency config tree prior to that of the dependent instance and subsequent non-`belongs_to` associations.
 
 ## Copyright
 

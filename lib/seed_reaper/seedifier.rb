@@ -8,6 +8,7 @@ module SeedReaper
   class Seedifier
     def initialize(config)
       @config = config
+      @serialized = []
     end
 
     def seedify
@@ -31,7 +32,10 @@ module SeedReaper
     def seedify_collection(collection, config)
       ce = ConfigEvaluator.new(config)
       evaluated_collection(collection, ce).reduce('') do |str, instance|
-        str += serialize(instance) + seedify_associations(instance, ce.schema)
+        str +=
+          seedify_associations(instance, ce.belongs_to_schema(instance)) +
+          serialize(instance) +
+          seedify_associations(instance, ce.non_belongs_to_schema(instance))
       end
     end
 
@@ -84,7 +88,12 @@ module SeedReaper
     end
 
     def serialize(instance)
-      "#{instance.class}.new(\n#{serialize_attrs(instance)}\n).save!(validate: false)\n\n"
+      seed = "#{instance.class}.new(\n#{serialize_attrs(instance)}\n).save!(validate: false)\n\n"
+      hashed_seed = Digest::SHA2.hexdigest(seed)
+      return '' if @serialized.include?(hashed_seed)
+
+      @serialized << hashed_seed
+      seed
     end
 
     def serialize_attrs(instance)

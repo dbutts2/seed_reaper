@@ -14,6 +14,32 @@ module SeedReaper
       @config
     end
 
+    def belongs_to_schema(instance)
+      return nil unless schema
+      return schema.select { |k| instance._reflections[k.to_s].belongs_to? } if schema.is_a?(Hash)
+      return schema.select do |c|
+        if c.is_a?(Hash)
+          instance._reflections[c.first[0].to_s].belongs_to?
+        else
+          instance._reflections[c.to_s].belongs_to?
+        end
+      end if schema.is_a?(Array)
+      return schema if instance._reflections[schema.to_s].belongs_to?
+    end
+
+    def non_belongs_to_schema(instance)
+      return nil unless schema
+      return schema.reject { |k| instance._reflections[k.to_s].belongs_to? } if schema.is_a?(Hash)
+      return schema.reject do |c|
+        if c.is_a?(Hash)
+          instance._reflections[c.first[0].to_s].belongs_to?
+        else
+          instance._reflections[c.to_s].belongs_to?
+        end
+      end if schema.is_a?(Array)
+      return schema unless instance._reflections[schema.to_s].belongs_to?
+    end
+
     %i[count joins].each do |meta_field|
       define_method meta_field do
         meta(meta_field)

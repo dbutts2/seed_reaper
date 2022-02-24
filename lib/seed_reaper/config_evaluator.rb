@@ -40,7 +40,7 @@ module SeedReaper
       return schema unless instance._reflections[schema.to_s].belongs_to?
     end
 
-    %i[count joins].each do |meta_field|
+    %i[count joins nullify].each do |meta_field|
       define_method meta_field do
         meta(meta_field)
       end

@@ -125,6 +125,26 @@ describe SeedReaper::Seedifier do
           SEED
         end
       end
+
+      context 'when nullifying thing_id' do
+        let(:config) { { associated_thing: { meta: { nullify: :thing_id } } } }
+
+        it 'serializes the associated things without thing_id' do
+          expect(subject.seedify).to eq <<~SEED
+            #{
+              AssociatedThing.all.map do |at|
+                <<~ASSOC_SEED
+                  AssociatedThing.new(
+                    id: #{at.id},
+                    thing_id: nil,
+                    another_attribute: %q{#{at.another_attribute}}
+                  ).save!(validate: false)
+                ASSOC_SEED
+              end.join("\n")
+            }
+          SEED
+        end
+      end
     end
   end
 end

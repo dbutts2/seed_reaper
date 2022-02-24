@@ -34,7 +34,7 @@ module SeedReaper
       evaluated_collection(collection, ce).reduce('') do |str, instance|
         str +=
           seedify_associations(instance, ce.belongs_to_schema(instance)) +
-          serialize(instance) +
+          serialize(instance, ce) +
           seedify_associations(instance, ce.non_belongs_to_schema(instance))
       end
     end
@@ -87,8 +87,8 @@ module SeedReaper
       collection
     end
 
-    def serialize(instance)
-      seed = "#{instance.class}.new(\n#{serialize_attrs(instance)}\n).save!(validate: false)\n\n"
+    def serialize(instance, config_evaluator)
+      seed = "#{instance.class}.new(\n#{serialize_attrs(instance, config_evaluator)}\n).save!(validate: false)\n\n"
       hashed_seed = Digest::SHA2.hexdigest(seed)
       return '' if @serialized.include?(hashed_seed)
 
@@ -96,9 +96,10 @@ module SeedReaper
       seed
     end
 
-    def serialize_attrs(instance)
+    def serialize_attrs(instance, config_evaluator)
       instance.attributes.to_h.reduce('') do |attr_str, (k, v)|
-        attr_str += "\s\s#{k}: #{ValueSerializer.new(v).serialized},\n"
+        nullify = [config_evaluator.nullify].flatten.compact.map(&:to_s).include?(k.to_s)
+        attr_str += "\s\s#{k}: #{ValueSerializer.new(v).serialized(nullify: nullify)},\n"
       end[0...-2]
     end
   end

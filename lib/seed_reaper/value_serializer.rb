@@ -6,9 +6,9 @@ module SeedReaper
       @value = value
     end
 
-    def serialized
+    def serialized(nullify: false)
       @serialized ||=
-        if @value.nil?
+        if nullify || @value.nil?
           "nil"
         elsif @value.is_a?(Integer)
           @value

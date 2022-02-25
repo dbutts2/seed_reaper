@@ -8,7 +8,7 @@ Subsetter and object to seed serializer.
 
 ## Usage
 
-!!NOTE!!: This currently removes/replaces EVERYTHING in your `db/seeds/` directory. Take care and save anything that you intend on keeping. More customization are to come regarding this functionality.
+!!NOTE!!: This currently removes/replaces EVERYTHING in your `db/seeds/` directory. Take care and save anything that you intend on keeping. More customizations to come regarding this functionality.
 
 Lets say you have the following:
 

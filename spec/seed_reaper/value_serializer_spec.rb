@@ -48,5 +48,13 @@ describe SeedReaper::ValueSerializer do
         is_expected.to eq 'nil'
       end
     end
+
+    context 'the string value "things {more} things"' do
+      let(:value) { 'things {more} things' }
+
+      it 'is %q{things \{more\} things}' do
+        is_expected.to eq '%q{things \{more\} things}'
+      end
+    end
   end
 end

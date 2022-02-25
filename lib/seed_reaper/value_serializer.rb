@@ -13,7 +13,7 @@ module SeedReaper
         elsif @value.is_a?(Integer)
           @value
         else
-          "%q{#{@value}}"
+          "%q{#{@value.to_s.gsub(/({|})/) { |c| "\\#{c}" }}}"
         end
     end
   end

@@ -46,7 +46,7 @@ describe SeedReaper::ConfigEvaluator do
     end
   end
 
-  %i[count joins nullify].each do |field|
+  %i[count joins nullify class_name].each do |field|
     describe "##{field}" do
       it "returns the value of the #{field} meta field" do
         expectation = 'test val'

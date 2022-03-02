@@ -22,6 +22,10 @@ describe SeedReaper::Seedifier do
         t.references :thing
         t.string :another_attribute
       end
+
+      create_table :scoped_things, force: true do |t|
+        t.string :some_attribute
+      end
     end
 
     class Thing < ActiveRecord::Base
@@ -30,6 +34,12 @@ describe SeedReaper::Seedifier do
 
     class AssociatedThing < ActiveRecord::Base
       belongs_to :thing
+    end
+
+    module Scoped
+      class Thing < ActiveRecord::Base
+        self.table_name = :scoped_things
+      end
     end
   end
 
@@ -45,7 +55,6 @@ describe SeedReaper::Seedifier do
 
   # rollback
   after(:each) { Thing.destroy_all }
-
 
   describe '#seedify' do
     context 'with a symbol' do
@@ -142,6 +151,26 @@ describe SeedReaper::Seedifier do
                 ASSOC_SEED
               end.join("\n")
             }
+          SEED
+        end
+      end
+
+      context 'with a special model name' do
+        let!(:scoped_thing) do
+          Scoped::Thing.create!(
+            some_attribute: 'some value'
+          )
+        end
+
+        let(:config) { { scoped_thing: { meta: { class_name: 'Scoped::Thing' } } } }
+
+        it 'is the seedified scoped thing' do
+          expect(subject.seedify).to eq <<~SEED
+            Scoped::Thing.new(
+              id: #{scoped_thing.id},
+              some_attribute: %q{#{scoped_thing.some_attribute}}
+            ).save!(validate: false)
+
           SEED
         end
       end

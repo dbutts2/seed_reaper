@@ -20,13 +20,17 @@ module SeedReaper
     def base_model
       return @config.to_s.camelize.constantize if @config.is_a?(Symbol)
 
-      @config.first[0].to_s.camelize.constantize
+      (base_config_evaluator.class_name || @config.first[0]).to_s.camelize.constantize
     end
 
     def base_config
       return nil if @config.is_a?(Symbol)
 
       @config.first[1]
+    end
+
+    def base_config_evaluator
+      @base_config_evaluator ||= ConfigEvaluator.new(base_config)
     end
 
     def seedify_collection(collection, config)

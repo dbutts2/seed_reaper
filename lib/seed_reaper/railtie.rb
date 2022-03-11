@@ -7,8 +7,8 @@ module SeedReaper
     railtie_name :seed_reaper
 
     rake_tasks do
-      path = File.expand_path(__dir__)
-      Dir.glob("#{path}/tasks/**/*.rake").each { |f| load f }
+      spec = Gem::Specification.find_by_name 'seed_reaper'
+      load "#{spec.gem_dir}/lib/tasks/seed_reaper.rake"
     end
   end
 end

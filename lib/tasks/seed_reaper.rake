@@ -7,9 +7,9 @@ namespace :seed_reaper do
   desc 'Write seeds to db/seeds/ based on config/seed_reaper.yml.'
   task :write do
     SeedReaper::SeedWriter.new(
-      YAML.load(
+      YAML.parse(
         File.read('config/seed_reaper.yml')
-      )
+      ).to_ruby
     ).write!
   end
 end

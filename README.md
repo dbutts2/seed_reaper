@@ -78,6 +78,10 @@ Note that order is significant. The seeds are serialized using `.save!(validate:
 
 Each root level config element passed to the `SeedWriter` initializer will get written to a separate seed file and sub configurations for each element will be written inline within the root level seed file. This is necessary in order to corectly interleave the processing of the seeds such that dependencies are not invalidated. This solution automatically handles `belongs_to` dependencies by serializing the dependency config tree prior to that of the dependent instance and subsequent non-`belongs_to` associations.
 
+## Rake Task
+
+A rails rake task comes stock with this gem, `seed_reaper:write`, that will take a YAML specification defined in `config/seed_reaper.yml` (format similar to the hash examples above), and write the seeds based on the specification provided. 
+
 ## Copyright
 
 Copyright (c) 2022 David Butts. See LICENSE.txt for

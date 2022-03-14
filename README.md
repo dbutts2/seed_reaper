@@ -80,7 +80,17 @@ Each root level config element passed to the `SeedWriter` initializer will get w
 
 ## Rake Task
 
-A rails rake task comes stock with this gem, `seed_reaper:write`, that will take a YAML specification defined in `config/seed_reaper.yml` (format similar to the hash examples above), and write the seeds based on the specification provided. 
+A rails rake task comes stock with this gem, `seed_reaper:write`, that will take a YAML specification defined in `config/seed_reaper.yml` (format similar to the hash examples above), and write the seeds based on the specification provided.
+
+## Rails' db:seed Task
+
+You could, for example, do the following to load the seeds from seed reaper in the correct order with the `db:seed` rake task:
+
+```
+# db/seeds.rb
+
+Dir[File.join(Rails.root, 'db', 'seeds', '*.seeds.rb')].sort.each { |seed| load seed }
+```
 
 ## Copyright
 

@@ -43,15 +43,16 @@ module SeedReaper
           Class.new(ActiveRecord::Base) do
             self.table_name = :#{name}
           end
-        ).upsert_all([
+        ).insert_all([
           #{
             [].tap do |attr_hashes|
+              add_hash = ->(i) { attr_hashes << "{ #{serialize_insert_attrs(i)} }" }
               (
                 Class.new(ActiveRecord::Base) do
                   self.table_name = name
                 end
-              ).find_each do |i|
-                attr_hashes << "{ #{serialize_upsert_attrs(i)} }"
+              ).tap do |c|
+                c.primary_key ? c.find_each(&add_hash) : c.all.each(&add_hash)
               end
             end.join(",\n\s\s")
           }
@@ -133,7 +134,7 @@ module SeedReaper
       end[0...-2]
     end
 
-    def serialize_upsert_attrs(instance)
+    def serialize_insert_attrs(instance)
       instance.attributes.to_h.map do |(k, v)|
         "#{k}: #{ValueSerializer.new(v).serialized}"
       end.join(', ')

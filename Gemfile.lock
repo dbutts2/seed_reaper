@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    seed_reaper (0.0.11)
+    seed_reaper (0.0.12)
       activesupport (>= 6)
 
 GEM

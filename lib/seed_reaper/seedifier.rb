@@ -12,7 +12,11 @@ module SeedReaper
     end
 
     def seedify
-      seedify_collection(base_model, base_config)
+      if base_config_evaluator.table_only
+        seedify_table_only(@config.first[0])
+      else
+        seedify_collection(base_model, base_config)
+      end
     end
 
     private
@@ -31,6 +35,28 @@ module SeedReaper
 
     def base_config_evaluator
       @base_config_evaluator ||= ConfigEvaluator.new(base_config)
+    end
+
+    def seedify_table_only(name)
+      <<~UPSERT
+        (
+          Class.new(ActiveRecord::Base) do
+            self.table_name = :#{name}
+          end
+        ).upsert_all([
+          #{
+            [].tap do |attr_hashes|
+              (
+                Class.new(ActiveRecord::Base) do
+                  self.table_name = name
+                end
+              ).find_each do |i|
+                attr_hashes << "{ #{serialize_upsert_attrs(i)} }"
+              end
+            end.join(",\n\s\s")
+          }
+        ])
+      UPSERT
     end
 
     def seedify_collection(collection, config)
@@ -105,6 +131,12 @@ module SeedReaper
         nullify = [config_evaluator.nullify].flatten.compact.map(&:to_s).include?(k.to_s)
         attr_str += "\s\s#{k}: #{ValueSerializer.new(v).serialized(nullify: nullify)},\n"
       end[0...-2]
+    end
+
+    def serialize_upsert_attrs(instance)
+      instance.attributes.to_h.map do |(k, v)|
+        "#{k}: #{ValueSerializer.new(v).serialized}"
+      end.join(', ')
     end
   end
 end

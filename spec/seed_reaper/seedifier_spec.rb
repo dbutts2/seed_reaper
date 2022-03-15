@@ -26,6 +26,10 @@ describe SeedReaper::Seedifier do
       create_table :scoped_things, force: true do |t|
         t.string :some_attribute
       end
+
+      create_table :has_no_models, force: true do |t|
+        t.string :some_attribute
+      end
     end
 
     class Thing < ActiveRecord::Base
@@ -171,6 +175,34 @@ describe SeedReaper::Seedifier do
               some_attribute: %q{#{scoped_thing.some_attribute}}
             ).save!(validate: false)
 
+          SEED
+        end
+      end
+
+      context 'with has_no_models' do
+        before do
+          (
+            Class.new(ActiveRecord::Base) do
+              self.table_name = :has_no_models
+            end
+          ).upsert_all([
+            { some_attribute: 'val 1' },
+            { some_attribute: 'val 2' }
+          ])
+        end
+
+        let(:config) { { has_no_models: { meta: { table_only: true } } } }
+
+        it 'is an anonymous upsert' do
+          expect(subject.seedify).to eq <<~SEED
+            (
+              Class.new(ActiveRecord::Base) do
+                self.table_name = :has_no_models
+              end
+            ).upsert_all([
+              { id: 1, some_attribute: %q{val 1} },
+              { id: 2, some_attribute: %q{val 2} }
+            ])
           SEED
         end
       end

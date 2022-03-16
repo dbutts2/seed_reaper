@@ -38,6 +38,14 @@ module SeedReaper
     end
 
     def seedify_table_only(name)
+      model = (
+        Class.new(ActiveRecord::Base) do
+          self.table_name = name
+        end
+      )
+
+      return unless model.exists?
+
       <<~UPSERT
         (
           Class.new(ActiveRecord::Base) do
@@ -47,13 +55,7 @@ module SeedReaper
           #{
             [].tap do |attr_hashes|
               add_hash = ->(i) { attr_hashes << "{ #{serialize_insert_attrs(i)} }" }
-              (
-                Class.new(ActiveRecord::Base) do
-                  self.table_name = name
-                end
-              ).tap do |c|
-                c.primary_key ? c.find_each(&add_hash) : c.all.each(&add_hash)
-              end
+              model.primary_key ? model.find_each(&add_hash) : model.all.each(&add_hash)
             end.join(",\n\s\s")
           }
         ])
